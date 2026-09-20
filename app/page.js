@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { Card, Text, Metric, Grid, BadgeDelta } from '@tremor/react';
 
 export default function HoloEarthTerminal() {
   const [macroData, setMacroData] = useState([]);
@@ -14,37 +13,51 @@ export default function HoloEarthTerminal() {
   }, []);
 
   return (
-    <main className="min-h-screen bg-black text-white p-6 md:p-12 font-mono">
-      <div className="mb-10">
-        <h1 className="text-3xl md:text-4xl font-bold tracking-widest text-cyan-500">HOLO_EARTH</h1>
-        <p className="text-zinc-400 mt-2 text-sm">INSTITUTIONAL INTELLIGENCE GRID :: ACTIVE</p>
+    <main style={{ minHeight: '100vh', backgroundColor: 'black', color: 'white', padding: '2rem 1.5rem', fontFamily: 'monospace' }}>
+      <div style={{ marginBottom: '3rem' }}>
+        <h1 style={{ fontSize: '2rem', fontWeight: 'bold', letterSpacing: '0.1em', color: '#06b6d4', margin: 0 }}>HOLO_EARTH</h1>
+        <p style={{ color: '#a1a1aa', marginTop: '0.5rem', fontSize: '0.75rem' }}>INSTITUTIONAL INTELLIGENCE GRID :: ACTIVE</p>
       </div>
 
-      <Grid numItemsSm={1} numItemsLg={3} className="gap-6">
-        <Card className="bg-zinc-900 border-zinc-800 ring-0">
-          <Text className="text-zinc-400">Node: RICH</Text>
-          <Metric className="text-white mt-2">Market Pulse</Metric>
-
-          <div className="mt-6 space-y-4">
-            {macroData.map((asset) => (
-              <div key={asset.entity_id} className="flex justify-between items-center border-b border-zinc-800 pb-2">
-                <span className="font-bold text-cyan-400">{asset.entity_id}</span>
-                <span className="text-zinc-300">${asset.close_price}</span>
-                <BadgeDelta deltaType={asset.rsi_14d > 70 ? "decrease" : asset.rsi_14d < 30 ? "increase" : "unchanged"}>
-                  RSI: {asset.rsi_14d}
-                </BadgeDelta>
-              </div>
-            ))}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '1.5rem' }}>
+        
+        {/* RICH Node Widget */}
+        <div style={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '0.5rem', padding: '1.5rem' }}>
+          <p style={{ color: '#a1a1aa', margin: 0, fontSize: '0.875rem' }}>Node: RICH</p>
+          <p style={{ color: 'white', fontSize: '1.25rem', fontWeight: '600', marginTop: '0.25rem', marginBottom: '1.5rem' }}>Market Pulse</p>
+          
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+            {macroData.length === 0 ? (
+              <p style={{ color: '#52525b', fontSize: '0.875rem' }}>Establishing secure connection...</p>
+            ) : (
+              macroData.map((asset) => (
+                <div key={asset.entity_id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid #27272a', paddingBottom: '0.5rem' }}>
+                  <span style={{ fontWeight: 'bold', color: '#22d3ee' }}>{asset.entity_id}</span>
+                  <span style={{ color: '#d4d4d8' }}>${asset.close_price}</span>
+                  <span style={{ 
+                    backgroundColor: asset.rsi_14d > 70 ? '#7f1d1d' : asset.rsi_14d < 30 ? '#14532d' : '#27272a', 
+                    padding: '0.25rem 0.5rem', 
+                    borderRadius: '0.25rem', 
+                    fontSize: '0.75rem',
+                    color: 'white'
+                  }}>
+                    RSI: {asset.rsi_14d}
+                  </span>
+                </div>
+              ))
+            )}
           </div>
-        </Card>
+        </div>
+        
+        {/* Placeholder Widgets */}
+        <div style={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '0.5rem', padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
+          <p style={{ color: '#52525b', fontSize: '0.875rem' }}>[ AWAITING AEGIS TELEMETRY ]</p>
+        </div>
+        <div style={{ backgroundColor: '#18181b', border: '1px solid #27272a', borderRadius: '0.5rem', padding: '2rem', display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '200px' }}>
+          <p style={{ color: '#52525b', fontSize: '0.875rem' }}>[ AWAITING KRAKEN TELEMETRY ]</p>
+        </div>
 
-        <Card className="bg-zinc-900 border-zinc-800 ring-0 flex items-center justify-center p-8">
-          <Text className="text-zinc-600 animate-pulse">[ AWAITING AEGIS TELEMETRY ]</Text>
-        </Card>
-        <Card className="bg-zinc-900 border-zinc-800 ring-0 flex items-center justify-center p-8">
-          <Text className="text-zinc-600 animate-pulse">[ AWAITING KRAKEN TELEMETRY ]</Text>
-        </Card>
-      </Grid>
+      </div>
     </main>
   );
 }
